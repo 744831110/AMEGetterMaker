@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D8C347525A54BE4004B9ABE /* AMEGetterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D8C347425A54BE4004B9ABE /* AMEGetterModel.m */; };
 		91685CBD1F56827500F53EE1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 91685CBC1F56827500F53EE1 /* AppDelegate.m */; };
 		91685CC01F56827500F53EE1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 91685CBF1F56827500F53EE1 /* main.m */; };
 		91685CC21F56827500F53EE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91685CC11F56827500F53EE1 /* Assets.xcassets */; };
@@ -58,6 +59,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0D8C347325A54BE4004B9ABE /* AMEGetterModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMEGetterModel.h; sourceTree = "<group>"; };
+		0D8C347425A54BE4004B9ABE /* AMEGetterModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMEGetterModel.m; sourceTree = "<group>"; };
 		91685CB81F56827500F53EE1 /* AMEGetterMaker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AMEGetterMaker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91685CBB1F56827500F53EE1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		91685CBC1F56827500F53EE1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -193,6 +196,8 @@
 				91685D031F56875A00F53EE1 /* AMEGetterMaker.m */,
 				91B502521F57C0EE0082073C /* NSString+AMEGetterMaker.h */,
 				91B502531F57C0EE0082073C /* NSString+AMEGetterMaker.m */,
+				0D8C347325A54BE4004B9ABE /* AMEGetterModel.h */,
+				0D8C347425A54BE4004B9ABE /* AMEGetterModel.m */,
 			);
 			path = AMEGetterMakerTools;
 			sourceTree = "<group>";
@@ -283,24 +288,24 @@
 				TargetAttributes = {
 					91685CB71F56827500F53EE1 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = HH594MAK5D;
+						DevelopmentTeam = 7355N2R3M7;
 						ProvisioningStyle = Automatic;
 					};
 					91685CCA1F56827500F53EE1 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = S8RBTQ8YQ5;
+						DevelopmentTeam = 7355N2R3M7;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 91685CB71F56827500F53EE1;
 					};
 					91685CD51F56827500F53EE1 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = S8RBTQ8YQ5;
+						DevelopmentTeam = 7355N2R3M7;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 91685CB71F56827500F53EE1;
 					};
 					91685CEB1F5682C400F53EE1 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = HH594MAK5D;
+						DevelopmentTeam = 7355N2R3M7;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -310,6 +315,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -390,6 +396,7 @@
 				91685CF51F5682C400F53EE1 /* SourceEditorExtension.m in Sources */,
 				91B502541F57C0EE0082073C /* NSString+AMEGetterMaker.m in Sources */,
 				91685CF81F5682C400F53EE1 /* SourceEditorCommand.m in Sources */,
+				0D8C347525A54BE4004B9ABE /* AMEGetterModel.m in Sources */,
 				91685D041F56875A00F53EE1 /* AMEGetterMaker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -519,11 +526,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = HH594MAK5D;
+				DEVELOPMENT_TEAM = 7355N2R3M7;
 				INFOPLIST_FILE = AMEGetterMaker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ame017.AMEGetterMaker;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cq.AMEGetterMaker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -534,11 +541,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = HH594MAK5D;
+				DEVELOPMENT_TEAM = 7355N2R3M7;
 				INFOPLIST_FILE = AMEGetterMaker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ame017.AMEGetterMaker;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cq.AMEGetterMaker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -549,7 +556,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = S8RBTQ8YQ5;
+				DEVELOPMENT_TEAM = 7355N2R3M7;
 				INFOPLIST_FILE = AMEGetterMakerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.AME.AMEGetterMakerTests;
@@ -564,7 +571,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = S8RBTQ8YQ5;
+				DEVELOPMENT_TEAM = 7355N2R3M7;
 				INFOPLIST_FILE = AMEGetterMakerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.AME.AMEGetterMakerTests;
@@ -578,7 +585,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = S8RBTQ8YQ5;
+				DEVELOPMENT_TEAM = 7355N2R3M7;
 				INFOPLIST_FILE = AMEGetterMakerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.AME.AMEGetterMakerUITests;
@@ -592,7 +599,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = S8RBTQ8YQ5;
+				DEVELOPMENT_TEAM = 7355N2R3M7;
 				INFOPLIST_FILE = AMEGetterMakerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.AME.AMEGetterMakerUITests;
@@ -607,11 +614,11 @@
 				CODE_SIGN_ENTITLEMENTS = GetterMaker/GetterMaker.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = HH594MAK5D;
+				DEVELOPMENT_TEAM = 7355N2R3M7;
 				INFOPLIST_FILE = GetterMaker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ame017.AMEGetterMaker;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cq.AMEGetterMaker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -623,11 +630,11 @@
 				CODE_SIGN_ENTITLEMENTS = GetterMaker/GetterMaker.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = HH594MAK5D;
+				DEVELOPMENT_TEAM = 7355N2R3M7;
 				INFOPLIST_FILE = GetterMaker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ame017.AMEGetterMaker;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cq.AMEGetterMaker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};

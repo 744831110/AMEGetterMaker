@@ -11,6 +11,9 @@
 @interface AppDelegate ()
 
 @property (weak) IBOutlet NSWindow *window;
+
+@property (nonatomic, strong) NSObject *testObject;
+
 @end
 
 @implementation AppDelegate
@@ -25,4 +28,10 @@
 }
 
 
+- (NSObject *)testObject{
+    if(!_testObject){
+          _testObject = [[NSObject alloc] init];
+    }
+    return _testObject;
+}
 @end

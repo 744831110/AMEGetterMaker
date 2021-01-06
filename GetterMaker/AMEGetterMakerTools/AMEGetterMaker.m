@@ -8,8 +8,7 @@
 
 #import "AMEGetterMaker.h"
 #import "NSString+AMEGetterMaker.h"
-
-
+#import "AMEGetterModel.h"
 
 static AMEGetterMaker * _ame_getter_maker;
 @implementation AMEGetterMaker
@@ -61,13 +60,17 @@ static AMEGetterMaker * _ame_getter_maker;
         NSInteger startLine = range.start.line;
         //选中的起始列
         NSInteger endLine   = range.end.line;
+        NSLog(@"cqtest start line is %ld end line is %ld", startLine, endLine);
         
         //遍历获取选中区域 获得选中区域的字符串数组
         NSMutableArray<NSString *> * selectLines = [self selectLinesWithStart:startLine endLine:endLine];
-        
+        NSLog(@"===========================");
+        NSInteger actionAndDelegateInsertIndex = -1;
         //按行处理 如果是objc就丢到十八层地狱 如果是swift就地处斩😈
         for (int i = 0 ; i < selectLines.count ; i++) {
             NSString * string = selectLines[i];
+            if(i == 0)
+            NSLog(@"cqtest string is %@", string);
             //排除空字符串
             if(string == nil||[string isEqualToString:@""]){
                 continue;
@@ -80,13 +83,21 @@ static AMEGetterMaker * _ame_getter_maker;
             NSString * getterResult =@"";
             //objc
             if (type == AMEGetterMakerTypeObjc) {
-                getterResult = [self objc_formatGetter:string];
+                AMEGetterModel *model = [self analysisPropertyLine:string];
+                getterResult = [self objc_formatGetter:model];
                 //找end并写入
                 NSInteger implementationEndLine = [self findEndLine:self.invocation.buffer.lines selectionEndLine:endLine];
                 if (implementationEndLine <= 1) {
                     continue;
                 }
+                if(i == 0) {
+                    actionAndDelegateInsertIndex = implementationEndLine;
+                }
                 [self.invocation.buffer.lines insertObject:getterResult atIndex:implementationEndLine];
+                NSString *actionAndDelegate = [self objc_actionAndDelegate:model];
+                if(actionAndDelegate) {
+                    [self.invocation.buffer.lines insertObject:actionAndDelegate atIndex:actionAndDelegateInsertIndex];
+                }
             }else{
                 //swift
                 getterResult = [self swift_formatGetter:string];
@@ -103,15 +114,13 @@ static AMEGetterMaker * _ame_getter_maker;
     }
 }
 
-//输出的字符串_objc
-- (NSString*)objc_formatGetter:(NSString*)sourceStr{
-    NSString *myResult;
+- (AMEGetterModel *)analysisPropertyLine:(NSString *)sourceStr {
     //@property (nonatomic, strong) NSArray<TJSDestinationModel *> * dataArray
     //类名
     NSString * className = [sourceStr getStringWithOutSpaceBetweenString1:@")" options1:0 string2:@"*" options2:NSBackwardsSearch];
     NSLog(@"className--->%@",className);
     if ([className isEqualToString:@""]) {
-        return @"";
+        return [[AMEGetterModel alloc] init];
     }
     NSString * childClass = @"";
     if ([className hasSubString:@"<"] && [className hasSubString:@">"]) {
@@ -124,26 +133,68 @@ static AMEGetterMaker * _ame_getter_maker;
     //属性名
     NSString * uName = [sourceStr getStringWithOutSpaceBetweenString1:@"*" options1:NSBackwardsSearch string2:@";" options2:NSBackwardsSearch];
     if ([uName isEqualToString:@""]) {
-        return @"";
+        return [[AMEGetterModel alloc] init];
     }
     NSLog(@"uName--->%@",uName);
     //_属性名
     NSString *underLineName=[NSString stringWithFormat:@"_%@",uName];
-    
-    
-    NSString *line1 = [NSString stringWithFormat:@"\n- (%@%@ *)%@{",className,childClass,uName];
-    NSString *line2 = [NSString stringWithFormat:@"\n    if(!%@){",underLineName];
-    NSString *line3 = [NSString stringWithFormat:@"\n        %@ = ({",underLineName];
-    NSString *line4 = [NSString stringWithFormat:@"\n            %@ * object = [[%@ alloc]init];",className,className];
-    NSString *line5 = [NSString stringWithFormat:@"\n            object;"];
-    NSString *line6 = [NSString stringWithFormat:@"\n       });"];
+    AMEGetterModel *model = [[AMEGetterModel alloc] init];
+    model.className = className;
+    model.childClass = childClass;
+    model.underLineName = underLineName;
+    model.propertyName = uName;
+    return model;
+}
+
+//输出的字符串_objc
+- (NSString*)objc_formatGetter:(AMEGetterModel *)model{
+    NSString *myResult;
+    NSString *line1 = [NSString stringWithFormat:@"\n- (%@%@ *)%@{",model.className,model.childClass,model.propertyName];
+    NSString *line2 = [NSString stringWithFormat:@"\n    if(!%@){",model.underLineName];
+    NSString *line3 = [NSString stringWithFormat:@"\n          %@ = [[%@ alloc] init];",model.underLineName, model.className];
+    NSString *line4 = [self objc_specialInitWithClassName:model];
     NSString *line7 = [NSString stringWithFormat:@"\n    }"];
-    NSString *line8 = [NSString stringWithFormat:@"\n    return %@;",underLineName];
+    NSString *line8 = [NSString stringWithFormat:@"\n    return %@;",model.underLineName];
     NSString *line9 = [NSString stringWithFormat:@"\n}"];
     
-    myResult = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@",line1,line2,line3,line4,line5,line6,line7,line8,line9];
+    
+    myResult = [NSString stringWithFormat:@"%@%@%@%@%@%@%@",line1,line2,line3,line4 ?: @"",line7,line8,line9];
     
     return myResult;
+}
+
+- (NSString *)objc_actionAndDelegate:(AMEGetterModel *)model {
+    NSString *result;
+    if([model.className containsString:@"Button"]) {
+        NSString *line1 = [NSString stringWithFormat:@"\n- (void)%@Action:(%@%@ *)sender{",model.propertyName,model.className,model.childClass];
+        NSString *line2 = [NSString stringWithFormat:@"\n    <#action#>"];
+        NSString *line3 = [NSString stringWithFormat:@"\n}"];
+        result = [NSString stringWithFormat:@"%@%@%@", line1, line2, line3];
+    }
+    return result;
+}
+
+- (NSString *)objc_specialInitWithClassName:(AMEGetterModel *)model {
+    NSString *string;
+    if([model.className containsString:@"Label"]) {
+        NSString *line1 = [NSString stringWithFormat:@"\n          [%@ setFont:<#font#>];",model.underLineName];
+        NSString *line2 = [NSString stringWithFormat:@"\n          [%@ setTextColor:<#color#>];",model.underLineName];
+        string = [NSString stringWithFormat:@"%@%@",line1,line2];
+    } else if([model.className containsString:@"Button"]) {
+        NSString *line1 = [NSString stringWithFormat:@"\n          [%@ addTarget:self action:@selector(%@Action:) forControlEvents:UIControlEventTouchUpInside];",model.underLineName ,model.propertyName];
+        string = [NSString stringWithFormat:@"%@", line1];
+    } else if([model.className containsString:@"StackView"]) {
+        NSString *line1 = [NSString stringWithFormat:@"\n          [%@ setAxis:<#(UILayoutConstraintAxis)#>];",model.underLineName];
+        NSString *line2 = [NSString stringWithFormat:@"\n          [%@ setAlignment:<#(UIStackViewAlignment)#>];",model.underLineName];
+        NSString *line3 = [NSString stringWithFormat:@"\n          [%@ setDistribution:<#(UIStackViewDistribution)#>];",model.underLineName];
+        string = [NSString stringWithFormat:@"%@%@%@", line1, line2, line3];
+    } else if([model.className containsString:@"TableView"]) {
+        NSString *line1 = [NSString stringWithFormat:@"\n          [%@ setSeparatorStyle:UITableViewCellSeparatorStyleNone];",model.underLineName];
+        NSString *line2 = [NSString stringWithFormat:@"\n          [%@ setDelegate:self];",model.underLineName];
+        NSString *line3 = [NSString stringWithFormat:@"\n          [%@ setDataSource:self];",model.underLineName];
+        string = [NSString stringWithFormat:@"%@%@%@", line1, line2, line3];
+    }
+    return string;
 }
 
 //输出的字符串_swift
@@ -222,5 +273,9 @@ static AMEGetterMaker * _ame_getter_maker;
     }
     return 0;
 }
+
+//自动创建setupSubview
+// 自动加布局到setupSubView
+// 自动添加#pragma mark -
 
 @end
