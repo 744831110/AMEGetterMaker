@@ -17,7 +17,9 @@
     NSLog(@"%@",invocation);
     
     if ([invocation.commandIdentifier hasSuffix:@"SourceEditorCommand"]){
-        [[AMEGetterMaker shardMaker]makeGetter:invocation];
+        for(XCSourceTextRange *range in invocation.buffer.selections) {
+            [[AMEGetterMaker shardMaker]makeGetter:invocation.buffer.lines selectStartLine:range.start.line selectEndLine:range.end.line];
+        }
     }
     completionHandler(nil);
 }

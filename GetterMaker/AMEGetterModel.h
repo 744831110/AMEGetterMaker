@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 // _array
 @property (nonatomic, copy) NSString *underLineName;
 
+@property (nonatomic, assign, readonly) BOOL isView;
+
 @end
 
 NS_ASSUME_NONNULL_END

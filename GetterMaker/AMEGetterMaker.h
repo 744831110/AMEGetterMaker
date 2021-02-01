@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <XcodeKit/XcodeKit.h>
 
 #define NSLog(FORMAT, ...)                                                        \
 fprintf(stderr, "(%s %s)<runClock:%ld> ->\n<%s : %d行> %s方法\n  %s\n -------\n",  \
@@ -25,11 +24,15 @@ typedef NS_ENUM(NSInteger, AMEGetterMakerType) {
     AMEGetterMakerTypeOther
 };
 
+typedef NS_ENUM(NSInteger, AMEImplementationType) {
+    AMEImplementationTypeObjc,
+    AMEImplementationTypeSwift,
+    AMEImplementationTypeOther
+};
+
 @interface AMEGetterMaker : NSObject
 
-@property (nonatomic, strong)XCSourceEditorCommandInvocation *invocation;
-
 + (instancetype)shardMaker;
-- (void)makeGetter:(XCSourceEditorCommandInvocation *)invocation;
+- (void)makeGetter:(NSMutableArray *)lines selectStartLine:(NSInteger)selectStartLine selectEndLine:(NSInteger)selectEndLine;
 
 @end
