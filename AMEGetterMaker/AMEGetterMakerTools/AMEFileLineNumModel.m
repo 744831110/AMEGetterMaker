@@ -52,6 +52,9 @@
     NSLog(@"AMEFileLineNumModel interface line num %ld", self.interfaceLineNum);
     NSRange rangeInterface = [interfaceLine rangeOfString:@"@interface"];
     NSRange rangeLeftBracket = [interfaceLine rangeOfString:@"("];
+    if(rangeLeftBracket.location == NSNotFound) {
+        rangeLeftBracket = [interfaceLine rangeOfString:@":"];
+    }
     NSRange classWithSpaceRange = NSMakeRange(rangeInterface.location + rangeInterface.length, interfaceLine.length - rangeInterface.length - rangeInterface.location - (interfaceLine.length - rangeLeftBracket.location));
     NSString * classWithSpace = [interfaceLine substringWithRange:classWithSpaceRange];
     //类名
@@ -69,6 +72,7 @@
         }
         if (findMark && [self.lines[i] rangeOfString:@"@end"].location != NSNotFound) {
             self.implementationEndLineNum = i;
+            break;
         }
     }
     NSLog(@"AMEFileLineNumModel implementationLineNum is %lld implementationEndLineNum is %lld", self.implementationLineNum, self.implementationEndLineNum);

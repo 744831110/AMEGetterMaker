@@ -28,4 +28,11 @@
     return NO;
 }
 
+- (BOOL)isViewController {
+    if([self.className rangeOfString:@"viewController" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    return NO;
+}
+
 @end

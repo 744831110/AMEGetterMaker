@@ -20,6 +20,8 @@
 		0DAE8DA425BBE8E0004BFADF /* AMEGetterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DAE8DA025BBE8E0004BFADF /* AMEGetterModel.m */; };
 		0DAE914A25BFBCA1004BFADF /* NSMutableArray+insertObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DAE914925BFBCA1004BFADF /* NSMutableArray+insertObject.m */; };
 		0DE65BB325C7D57600E16521 /* NSMutableArray+insertObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DE65BB125C7D57600E16521 /* NSMutableArray+insertObject.m */; };
+		0DFB980E25E0A57700EF1019 /* GetterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DFB980D25E0A57700EF1019 /* GetterTest.m */; };
+		0DFB981725E0A5D300EF1019 /* amegetterError.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0DFB981125E0A5BB00EF1019 /* amegetterError.txt */; };
 		91685CBD1F56827500F53EE1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 91685CBC1F56827500F53EE1 /* AppDelegate.m */; };
 		91685CC01F56827500F53EE1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 91685CBF1F56827500F53EE1 /* main.m */; };
 		91685CC21F56827500F53EE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91685CC11F56827500F53EE1 /* Assets.xcassets */; };
@@ -69,7 +71,6 @@
 		0D6B64AE25A59CA600663504 /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = Library/Frameworks/XcodeKit.framework; sourceTree = DEVELOPER_DIR; };
 		0D6B64D125A80A7B00663504 /* AMEFileLineNumModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMEFileLineNumModel.h; sourceTree = "<group>"; };
 		0D6B64D225A80A7B00663504 /* AMEFileLineNumModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMEFileLineNumModel.m; sourceTree = "<group>"; };
-		0D7DFB8E25B863EA0064089E /* GetterTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GetterTest.m; sourceTree = "<group>"; };
 		0D8C347325A54BE4004B9ABE /* AMEGetterModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMEGetterModel.h; sourceTree = "<group>"; };
 		0D8C347425A54BE4004B9ABE /* AMEGetterModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AMEGetterModel.m; sourceTree = "<group>"; };
 		0DAE8D9925BBE8DF004BFADF /* AMEGetterMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMEGetterMaker.h; sourceTree = "<group>"; };
@@ -85,6 +86,8 @@
 		0DE65BB125C7D57600E16521 /* NSMutableArray+insertObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+insertObject.m"; sourceTree = "<group>"; };
 		0DE65BB225C7D57600E16521 /* NSMutableArray+insertObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+insertObject.h"; sourceTree = "<group>"; };
 		0DE65BBB25C7DC1C00E16521 /* AMEGetterMakerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AMEGetterMakerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0DFB980D25E0A57700EF1019 /* GetterTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GetterTest.m; sourceTree = "<group>"; };
+		0DFB981125E0A5BB00EF1019 /* amegetterError.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = amegetterError.txt; sourceTree = "<group>"; };
 		91685CB81F56827500F53EE1 /* AMEGetterMaker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AMEGetterMaker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91685CBB1F56827500F53EE1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		91685CBC1F56827500F53EE1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -137,7 +140,8 @@
 		91685CAF1F56827500F53EE1 = {
 			isa = PBXGroup;
 			children = (
-				0D7DFB8E25B863EA0064089E /* GetterTest.m */,
+				0DFB981125E0A5BB00EF1019 /* amegetterError.txt */,
+				0DFB980D25E0A57700EF1019 /* GetterTest.m */,
 				91685CBA1F56827500F53EE1 /* AMEGetterMaker */,
 				91685CF01F5682C400F53EE1 /* GetterMaker */,
 				91685CED1F5682C400F53EE1 /* Frameworks */,
@@ -351,6 +355,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				91685CC21F56827500F53EE1 /* Assets.xcassets in Resources */,
+				0DFB981725E0A5D300EF1019 /* amegetterError.txt in Resources */,
 				91685CC51F56827500F53EE1 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -369,6 +374,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DFB980E25E0A57700EF1019 /* GetterTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

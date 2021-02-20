@@ -32,11 +32,16 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0D7DFBA325B864560064089E"
+               BlueprintIdentifier = "0DE65BBA25C7DC1C00E16521"
                BuildableName = "AMEGetterMakerTests.xctest"
                BlueprintName = "AMEGetterMakerTests"
                ReferencedContainer = "container:AMEGetterMaker.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "AMEGetterMakerTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">

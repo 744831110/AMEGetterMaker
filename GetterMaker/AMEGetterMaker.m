@@ -13,6 +13,8 @@
 #import "NSMutableArray+insertObject.h"
 
 static AMEGetterMaker * _ame_getter_maker;
+static NSString * const kbeginIgnoreWarnString = @"ASBeginIgnoreNotCodeAllWarings";
+static NSString * const kendIgnoreWarnString = @"ASEndIgnoreNotCodeAllWarings";
 
 @interface AMEGetterMaker()
 
@@ -126,6 +128,7 @@ static AMEGetterMaker * _ame_getter_maker;
             self.actionAndDelegateInsertIndex = implementationEndLine;
         }
         [self.lines insertObject:getterResult atIndex:implementationEndLine];
+        [self.lineNumModel updateLines:self.lines];
         NSString *actionAndDelegate = [self objc_actionAndDelegate:model];
         if(actionAndDelegate) {
             [self.lines insertObject:actionAndDelegate atIndex:self.actionAndDelegateInsertIndex];
@@ -249,6 +252,10 @@ static AMEGetterMaker * _ame_getter_maker;
             }
         }
     }
+    NSInteger ignoreEndIndex = [self.lineNumModel findString:kendIgnoreWarnString startLine:lastIndex];
+    if(ignoreEndIndex != -1) {
+        return ignoreEndIndex + 1;
+    }
     return lastIndex+1;
 }
 
@@ -354,6 +361,40 @@ static AMEGetterMaker * _ame_getter_maker;
     return result.copy;
 }
 
+#pragma mark - sort
+- (void)sortImport {
+    NSInteger firstIndex = [self.lineNumModel findRegex:@"#import [\\\"|<][\\w\\.]+[\\\"|>]" startLine:0]+1;
+    NSInteger endIndex = [self findInsertImportIndex]-1;
+    NSInteger firstIgnoreWarnIndex = [self.lineNumModel findString:@"ASBeginIgnoreNotCodeAllWarings" startLine:firstIndex];
+    NSInteger endIgnoreWarnIndex = [self.lineNumModel findString:@"ASEndIgnoreNotCodeAllWarings" startLine:firstIndex];
+    NSMutableArray *importArray = [[NSMutableArray alloc] initWithCapacity:1];
+    NSMutableArray *ignoreWarnArray = [[NSMutableArray alloc] initWithCapacity:1];
+    if(firstIgnoreWarnIndex == -1 || endIgnoreWarnIndex == -1) {
+        // 直接排序
+        [importArray addObjectsFromArray:[self.lines subarrayWithRange:NSMakeRange(firstIndex, endIndex - firstIndex + 1)]];
+    } else {
+        [importArray addObjectsFromArray:[self.lines subarrayWithRange:NSMakeRange(firstIndex, endIndex - firstIndex)]];
+        if(endIndex > endIgnoreWarnIndex) {
+            [importArray addObject:[self.lines subarrayWithRange:NSMakeRange(endIgnoreWarnIndex+1, endIndex)]];
+        }
+        [ignoreWarnArray addObjectsFromArray:[self.lines subarrayWithRange:NSMakeRange(firstIgnoreWarnIndex+1, endIgnoreWarnIndex - firstIgnoreWarnIndex - 1)]];
+    }
+    [ignoreWarnArray sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        return [obj1 compare:obj2 options:NSNumericSearch];
+    }];
+    [importArray sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        return [obj1 compare:obj2 options:NSNumericSearch];
+    }];
+    [self.lines removeObjectsInRange:NSMakeRange(firstIndex, endIndex - firstIndex + 1)];
+    NSMutableArray *insertStringArray = [importArray mutableCopy];
+    if(ignoreWarnArray.count == 0) {
+        [insertStringArray addObject:kbeginIgnoreWarnString];
+        [insertStringArray addObjectsFromArray:ignoreWarnArray];
+        [insertStringArray addObject:kendIgnoreWarnString];
+    }
+    [self.lines insertObjects:insertStringArray atFirstIndex:firstIndex];
+}
+
 #pragma mark - Swift
 //输出的字符串_swift
 - (NSString*)swift_formatGetter:(NSString*)sourceStr{
@@ -404,7 +445,7 @@ static AMEGetterMaker * _ame_getter_maker;
 
 // 自动创建setupSubview -
 // 自动加布局到setupSubView -
-// 加入添加布局库
+// 加入添加布局库 -
 // 导入相关库 并排序
 
 @end

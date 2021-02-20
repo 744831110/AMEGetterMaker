@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "AMEGetterMaker.h"
 
 @interface GetterTest : XCTestCase
 
@@ -25,6 +26,13 @@
 - (void)testExample {
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *txtPath = [bundle pathForResource:@"amegetterError" ofType:@"txt"];
+    NSString *content = [NSString stringWithContentsOfFile:txtPath encoding:NSUTF8StringEncoding error:nil];
+    NSLog(@"content is %@",content);
+    NSMutableArray<NSString *> *contentArray = [[content componentsSeparatedByString:@"\n"] mutableCopy];
+    
+    [[AMEGetterMaker shardMaker] makeGetter:contentArray selectStartLine:32 selectEndLine:38];
 }
 
 - (void)testPerformanceExample {
