@@ -2,7 +2,7 @@
 //  GetterTest.m
 //  AMEGetterMakerTests
 //
-//  Created by 陈谦 on 2021/1/20.
+//  Created by 陈谦 on 2021/2/20.
 //  Copyright © 2021 AME. All rights reserved.
 //
 

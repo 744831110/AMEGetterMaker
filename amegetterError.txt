@@ -1,0 +1,51 @@
+//
+//  THMLearnerEnquiryCell.m
+//  THMSetting
+//
+//  Created by 陈谦 on 2021/2/19.
+//
+
+#import "THMLearnerEnquiryCell.h"
+
+@interface THMLearnerEnquiryCell()
+
+@end
+
+@implementation THMLearnerEnquiryCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
+    }
+    return self;
+}
+
+- (void)initSubview {
+    
+}
+
+@end
+
+@interface THMLearnerEnquiryContentView : UIView
+
+@property (nonatomic, strong) UILabel *nameLabel;
+@property (nonatomic, strong) UILabel *createTimeLabel;
+@property (nonatomic, strong) UILabel *phoneLabel;
+@property (nonatomic, strong) UILabel *emailLabel;
+@property (nonatomic, strong) UILabel *doubtLabel;
+@property (nonatomic, strong) UILabel *noteLabel;
+@property (nonatomic, strong) UIStackView *stackView;
+
+@end
+
+@implementation THMLearnerEnquiryContentView
+
+@end
+
+@interface THMLearnerEnquiryContactView : UIView
+
+@end
+
+@implementation THMLearnerEnquiryContactView
+
+@end
