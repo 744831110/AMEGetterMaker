@@ -25,6 +25,8 @@ static NSString * const kendIgnoreWarnString = @"ASEndIgnoreNotCodeAllWarings";
 @property (nonatomic, assign) NSInteger actionAndDelegateInsertIndex;
 @property (nonatomic, strong) AMEFileLineNumModel *lineNumModel;
 @property (nonatomic, strong) NSMutableArray<NSString *> *uiPodArray;
+@property (nonatomic, assign) BOOL isSortImport;
+@property (nonatomic, assign) BOOL isNeedInsertPod;
 
 @end
 
@@ -87,29 +89,22 @@ static NSString * const kendIgnoreWarnString = @"ASEndIgnoreNotCodeAllWarings";
         //排除注释和xib
         if (type != AMEGetterMakerTypeOther) {
             [self handlePropertyString:string type:type startLine:startLine endLine:endLine implementationEndLine:self.lineNumModel.implementationEndLineNum];
-        } else {
-            AMEImplementationType type = [self implementationTypeJudgeWithString:string];
-            if(type != AMEGetterMakerTypeOther) {
-                [self handleImplementString:string type:type];
-            }
         }
     }
+    if(self.isNeedInsertPod) {
+        [self insertUiPod];
+    }
+    [self sortImport];
 }
 
 #pragma mark - Objective-C
 #pragma mark impletation
-- (void)handleImplementString:(NSString *)string type:(AMEImplementationType)type {
-    if(type == AMEImplementationTypeObjc) {
-        [self insertUiPod];
-    }
-}
 
 - (void)insertUiPod {
     if(self.uiPodArray.count != 0) {
         NSInteger index = [self findInsertImportIndex];
         NSArray<NSString *> *array = [self objc_uiPod];
         [self.lines insertObjects:array atFirstIndex:index];
-        [self.lineNumModel updateLines:self.lines];
     }
 }
 
@@ -139,7 +134,7 @@ static NSString * const kendIgnoreWarnString = @"ASEndIgnoreNotCodeAllWarings";
             NSArray<NSString *> *constraintArray = [self objc_masonryConstraint:model];
             [self.lines insertObjects:constraintArray atFirstIndex:setupSubviewFunctionInsertIndex];
             [self.lineNumModel updateLines:self.lines];
-            [self insertUiPod];
+            self.isNeedInsertPod = YES;
         }
     }else{
         //swift
@@ -196,24 +191,13 @@ static NSString * const kendIgnoreWarnString = @"ASEndIgnoreNotCodeAllWarings";
         if(!isInsertWhenMiss) {
             return -1;
         }
-        // 没有找到setupSubview，在impletement下的第一个方法后面创建一个
-        NSInteger firstFunctionLine = [self.lineNumModel findRegex:@"- *\\([\\w]+\\) *[\\w]+ *{" startLine:self.lineNumModel.implementationLineNum];
-        if(firstFunctionLine == -1) {
-            firstFunctionLine = [self.lineNumModel findRegex:@"- *\\([\\w]+\\) *[\\w]+ *" startLine:self.lineNumModel.implementationLineNum]+1;
-            if(firstFunctionLine == -1) {
-                firstFunctionLine = self.lineNumModel.implementationLineNum;
-            }
-        }
-        NSLog(@"cqtest  firstFunctionLine %ld", firstFunctionLine);
-        NSInteger firstFunctionEndLine = [self.lineNumModel findPairChar:AMEFilePairCharFindTypeCurlyBrackets startLine:firstFunctionLine];
-        NSLog(@"cqtest  firstFunctionEndLine %ld", firstFunctionEndLine);
-        NSLog(@"cqtest  insertIndex %ld", insertIndex);
+        // 没有找到setupSubview，在impletement下的后面创建一个
         NSString *line1 = [NSString stringWithFormat:@"- (void)setupSubview {"];
         NSString *line2 = [NSString stringWithFormat:@"\t<#add subview#>\n"];
         NSString *line3 = [NSString stringWithFormat:@"}"];
-        [self.lines insertObjects:@[@"\n", line1, line2, line3] atFirstIndex:firstFunctionEndLine + 2];
+        [self.lines insertObjects:@[@"\n", line1, line2, line3] atFirstIndex:self.lineNumModel.implementationLineNum+1];
         [self.lineNumModel updateLines:self.lines];
-        insertIndex = [self.lineNumModel findPairChar:AMEFilePairCharFindTypeCurlyBrackets startLine:firstFunctionEndLine+3];
+        insertIndex = [self.lineNumModel findPairChar:AMEFilePairCharFindTypeCurlyBrackets startLine:self.lineNumModel.implementationLineNum+1];
     } else {
         insertIndex = [self.lineNumModel findPairChar:AMEFilePairCharFindTypeCurlyBrackets startLine:setupSubviewline];
         NSLog(@"cqtest  insertIndex %ld", insertIndex);
@@ -286,7 +270,7 @@ static NSString * const kendIgnoreWarnString = @"ASEndIgnoreNotCodeAllWarings";
 //输出的字符串_objc
 - (NSString*)objc_formatGetter:(AMEGetterModel *)model{
     NSString *myResult;
-    NSString *line1 = [NSString stringWithFormat:@"\n- (%@%@ *)%@{",model.className,model.childClass,model.propertyName];
+    NSString *line1 = [NSString stringWithFormat:@"\n- (%@%@ *)%@ {",model.className,model.childClass,model.propertyName];
     NSString *line2 = [NSString stringWithFormat:@"\n\tif(!%@){",model.underLineName];
     NSString *line3 = [NSString stringWithFormat:@"\n\t\t%@ = [[%@ alloc] init];",model.underLineName, model.className];
     NSString *line4 = [self objc_specialInitWithClassName:model];
@@ -371,20 +355,16 @@ static NSString * const kendIgnoreWarnString = @"ASEndIgnoreNotCodeAllWarings";
     NSMutableArray *ignoreWarnArray = [[NSMutableArray alloc] initWithCapacity:1];
     if(firstIgnoreWarnIndex == -1 || endIgnoreWarnIndex == -1) {
         // 直接排序
-        [importArray addObjectsFromArray:[self.lines subarrayWithRange:NSMakeRange(firstIndex, endIndex - firstIndex + 1)]];
+        [self sortWithSepaciaRule:importArray];
     } else {
-        [importArray addObjectsFromArray:[self.lines subarrayWithRange:NSMakeRange(firstIndex, endIndex - firstIndex)]];
+        [importArray addObjectsFromArray:[self.lines subarrayWithRange:NSMakeRange(firstIndex, firstIgnoreWarnIndex - firstIndex)]];
         if(endIndex > endIgnoreWarnIndex) {
-            [importArray addObject:[self.lines subarrayWithRange:NSMakeRange(endIgnoreWarnIndex+1, endIndex)]];
+            [importArray addObjectsFromArray:[self.lines subarrayWithRange:NSMakeRange(endIgnoreWarnIndex+1, endIndex-endIgnoreWarnIndex-1)]];
         }
         [ignoreWarnArray addObjectsFromArray:[self.lines subarrayWithRange:NSMakeRange(firstIgnoreWarnIndex+1, endIgnoreWarnIndex - firstIgnoreWarnIndex - 1)]];
+        [self sortWithSepaciaRule:importArray];
+        [self sortWithSepaciaRule:ignoreWarnArray];
     }
-    [ignoreWarnArray sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        return [obj1 compare:obj2 options:NSNumericSearch];
-    }];
-    [importArray sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        return [obj1 compare:obj2 options:NSNumericSearch];
-    }];
     [self.lines removeObjectsInRange:NSMakeRange(firstIndex, endIndex - firstIndex + 1)];
     NSMutableArray *insertStringArray = [importArray mutableCopy];
     if(ignoreWarnArray.count == 0) {
@@ -393,6 +373,26 @@ static NSString * const kendIgnoreWarnString = @"ASEndIgnoreNotCodeAllWarings";
         [insertStringArray addObject:kendIgnoreWarnString];
     }
     [self.lines insertObjects:insertStringArray atFirstIndex:firstIndex];
+}
+
+- (void)sortWithSepaciaRule:(NSMutableArray<NSString *> *)array {
+    NSMutableArray<NSString *> *sepaciaArray = [[NSMutableArray alloc] init];
+    for(NSString *string in array) {
+        NSLog(@"cqtest sort crash string is %@", string);
+        if([self.lineNumModel firstMatch:@"(\"|<)(AS|EDU|THM)" findString:string]) {
+            [sepaciaArray addObject:string];
+        }
+    }
+    for(NSString *string in sepaciaArray) {
+        [array removeObject:string];
+    }
+    [sepaciaArray sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        return [obj1 compare:obj2 options:NSNumericSearch];
+    }];
+    [array sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        return [obj1 compare:obj2 options:NSNumericSearch];
+    }];
+    [array insertObjects:sepaciaArray atFirstIndex:0];
 }
 
 #pragma mark - Swift
@@ -447,5 +447,6 @@ static NSString * const kendIgnoreWarnString = @"ASEndIgnoreNotCodeAllWarings";
 // 自动加布局到setupSubView -
 // 加入添加布局库 -
 // 导入相关库 并排序
+// setsubview和button action的插入有问题
 
 @end

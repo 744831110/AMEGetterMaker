@@ -32,7 +32,7 @@
     NSLog(@"content is %@",content);
     NSMutableArray<NSString *> *contentArray = [[content componentsSeparatedByString:@"\n"] mutableCopy];
     
-    [[AMEGetterMaker shardMaker] makeGetter:contentArray selectStartLine:32 selectEndLine:38];
+    [[AMEGetterMaker shardMaker] makeGetter:contentArray selectStartLine:7 selectEndLine:36];
 }
 
 - (void)testPerformanceExample {

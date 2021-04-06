@@ -48,6 +48,9 @@
             break;
         }
     }
+    if([interfaceLine isEqualToString:@""]) {
+        return;;
+    }
     NSLog(@"AMEFileLineNumModel interface line is %@", interfaceLine);
     NSLog(@"AMEFileLineNumModel interface line num %ld", self.interfaceLineNum);
     NSRange rangeInterface = [interfaceLine rangeOfString:@"@interface"];
@@ -109,10 +112,12 @@
 
 - (NSInteger)findPairStringWithLeft:(NSString *)leftString right:(NSString *)rightString regex:(NSString *)regex startLine:(NSInteger)startLine {
     int count = 0;
+    BOOL isSearchTarget = NO;
     for(NSInteger i = startLine; i<self.lines.count; i++) {
         NSString *line = self.lines[i];
         NSArray<NSTextCheckingResult *> *array = [self match:regex findString:line];
         for(NSTextCheckingResult *result in array) {
+            isSearchTarget = YES;
             NSRange range = result.range;
             NSString *subString = [line substringWithRange:range];
             if([leftString isEqualToString:subString]) {
@@ -124,7 +129,7 @@
                 break;
             }
         }
-        if(count == 0) {
+        if(count == 0 && isSearchTarget) {
             return i;
         }
     }
