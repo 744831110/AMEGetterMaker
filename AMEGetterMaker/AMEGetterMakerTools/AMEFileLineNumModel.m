@@ -86,13 +86,13 @@
 }
 
 - (NSInteger)findString:(NSString *)string startLine:(NSInteger)startLine {
-    for(NSInteger i = startLine; i<self.lines.count; i++) {
+    for(NSInteger i = startLine; i<self.implementationEndLineNum; i++) {
         NSString *line = self.lines[i];
         if([line rangeOfString:string].location != NSNotFound) {
             return i;
         }
     }
-    return -1;
+    return NSNotFound;
 }
 
 - (NSInteger)findPairChar:(AMEFilePairCharFindType)type startLine:(NSInteger)startLine{
@@ -133,7 +133,7 @@
             return i;
         }
     }
-    return -1;
+    return NSNotFound;
 }
 
 - (NSInteger)findRegex:(NSString *)string {
@@ -148,7 +148,7 @@
             return i;
         }
     }
-    return -1;
+    return NSNotFound;
 }
 
 - (NSTextCheckingResult *)firstMatch:(NSString *)regularString findString:(NSString *)findString {

@@ -31,7 +31,7 @@
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *createTimeLabel;
 @property (nonatomic, strong) UILabel *phoneLabel;
-@property (nonatomic, strong) UILabel *emailLabel;
+@property (nonatomic, strong) UIButton *emailLabel;
 @property (nonatomic, strong) UILabel *doubtLabel;
 @property (nonatomic, strong) UILabel *noteLabel;
 @property (nonatomic, strong) UIStackView *stackView;
@@ -40,6 +40,8 @@
 
 @implementation TestStudyContentView
 
+#pragma mark - action
+
 @end
 
 @interface TestStudyContactView : UIView
@@ -47,5 +49,21 @@
 @end
 
 @implementation TestStudyContactView
+
+@end
+
+@interface THMFeeTestViewController : NSObject
+
+@property (nonatomic, strong) UILabel *nameLabel;
+@property (nonatomic, strong) UILabel *createTimeLabel;
+@property (nonatomic, strong) UIButton *phoneButton;
+@property (nonatomic, strong) UILabel *emailLabel;
+@property (nonatomic, strong) UILabel *doubtLabel;
+@property (nonatomic, strong) UILabel *noteLabel;
+@property (nonatomic, strong) UIStackView *stackView;
+
+@end
+
+@implementation THMFeeTestViewController
 
 @end
